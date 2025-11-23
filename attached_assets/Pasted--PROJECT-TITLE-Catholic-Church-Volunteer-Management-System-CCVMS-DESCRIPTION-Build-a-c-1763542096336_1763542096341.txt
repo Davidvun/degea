@@ -1,0 +1,183 @@
+🔧 PROJECT TITLE:
+Catholic Church Volunteer Management System (CCVMS)
+
+📌 DESCRIPTION:
+Build a complete full-stack web application that digitizes the management, coordination, scheduling, tracking, and reporting of volunteers within Catholic church parishes. The system must follow the requirements extracted from the project documentation:
+
+- Centralized volunteer database  
+- Automated scheduling & assignment  
+- Attendance & performance tracking  
+- Reporting & analytics  
+- Communication tools  
+- Role-based access control  
+- Ministry and program management  
+- Feedback & evaluation system
+
+=====================================================
+🛠 TECHNOLOGIES (STRICT REQUIREMENT)
+=====================================================
+Frontend:
+- HTML  
+- CSS  
+- TailwindCSS (via CDN or CLI)  
+
+Backend:
+- Python  
+- Django Framework  
+- **DO NOT use Replit Auth.**  
+- Must run locally using Django’s built-in authentication.  
+
+=====================================================
+📌 GENERAL SYSTEM OBJECTIVE (FROM PDF)
+=====================================================
+Build a system that registers volunteers, assigns them to ministries/programs, tracks their activities, manages communication, and generates performance and participation reports.
+
+=====================================================
+📌 SPECIFIC OBJECTIVES (IMPLEMENT ALL)
+=====================================================
+1. Provide a centralized platform for registering and managing volunteer profiles.
+2. Automate volunteer assignment to ministries, parish events, and community programs.
+3. Track attendance and monitor volunteer performance.
+4. Enable communication via announcements, reminders, and event updates.
+5. Generate participation reports and performance analytics.
+6. Improve transparency and coordination between parish leaders and volunteers.
+7. Support ministry & program management within the parish.
+
+=====================================================
+📌 CORE MODULES & FEATURES (BASED ENTIRELY ON PDF)
+=====================================================
+
+-----------------------------------------------------
+1. ⭐ Volunteer Registration Module
+-----------------------------------------------------
+- Capture personal details: name, gender, age, phone, email  
+- Record interests, skills, ministry preferences  
+- Track availability & date joined  
+- CRUD operations for coordinators & admins  
+- View volunteer list w/ search, filters, pagination  
+
+-----------------------------------------------------
+2. ⭐ Assignment & Scheduling Module
+-----------------------------------------------------
+- Create events and parish programs  
+- Assign volunteers to ministries or events  
+- Generate activity schedules  
+- Display upcoming events (calendar/table format)  
+- Allow coordinators to update assignments  
+
+-----------------------------------------------------
+3. ⭐ Attendance & Performance Tracker
+-----------------------------------------------------
+- Track attendance for each event  
+- Mark present/absent  
+- Maintain attendance history per volunteer  
+- Generate performance scores (based on attendance frequency, participation)  
+
+-----------------------------------------------------
+4. ⭐ Communication Center
+-----------------------------------------------------
+- Send email notifications (reminders, announcements, updates)  
+- Event reminders  
+- Admin/priest/coordinator message center  
+- Configurable Django email backend  
+
+-----------------------------------------------------
+5. ⭐ Reporting & Analytics Module
+-----------------------------------------------------
+Generate:
+- Volunteer demographics  
+- Participation rates  
+- Ministry performance  
+- Attendance statistics  
+- Active vs. inactive volunteers  
+- Event outcomes  
+- Exportable reports (CSV or PDF)  
+
+Use Tailwind-based dashboards with charts (optional JS).
+
+-----------------------------------------------------
+6. ⭐ Ministry & Program Management
+-----------------------------------------------------
+- Register ministries  
+- Assign leaders  
+- Link volunteers to ministries (ManyToMany)  
+- Monitor volunteer distribution  
+- Track ongoing parish programs  
+
+-----------------------------------------------------
+7. ⭐ Feedback & Evaluation Module
+-----------------------------------------------------
+- Allow parish leaders to leave volunteer evaluations  
+- Feedback forms after events  
+- Recognize active volunteers  
+
+-----------------------------------------------------
+8. ⭐ Security & Access Control
+-----------------------------------------------------
+Role-based accounts (Django Groups or Custom User Model):
+
+- **Administrator**  
+  Full privileges: users, ministries, system settings  
+
+- **Priest**  
+  View reports, oversee ministries, approve events  
+
+- **Coordinator**  
+  Manage volunteers, schedule, attendance  
+
+- **Volunteer**  
+  View assigned tasks & announcements  
+
+Enforce permission-based access to pages and functions.
+
+=====================================================
+📁 PROJECT STRUCTURE REQUIREMENTS
+=====================================================
+Apps to create:
+- `accounts` (authentication & role management)
+- `volunteers`
+- `ministries`
+- `events` or `scheduling`
+- `attendance`
+- `communications`
+- `reports`
+- `feedback`
+
+Static & Template Requirements:
+- Use Tailwind with a `base.html` layout  
+- Responsive UI  
+- Dashboard with cards and tables  
+
+=====================================================
+🚀 FUNCTIONAL REQUIREMENTS
+=====================================================
+1. System must run locally:
+   - `python manage.py migrate`
+   - `python manage.py createsuperuser`
+   - `python manage.py runserver`
+
+2. Include:
+   - sample models
+   - views (class-based preferred)
+   - templates
+   - URLs
+   - forms
+   - Tailwind config
+   - dashboard layout
+
+3. Provide installation instructions.
+
+=====================================================
+🎯 FINAL DELIVERABLE EXPECTATION
+=====================================================
+Generate a Django project with:
+- Fully working backend structure  
+- All modules defined above  
+- Tailwind-ready HTML templates  
+- Authentication & role-based access  
+- CRUD functionalities  
+- Example pages & base navigation  
+- Sample dashboard widgets  
+- Local development readiness  
+
+No Replit Auth. No online DB. Pure Django.

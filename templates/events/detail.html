@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">{{ event.title }}</h2>
+        {% if user.can_manage_volunteers %}
+        <div class="space-x-2">
+            <a href="{% url 'events:edit' event.pk %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Edit</a>
+            <a href="{% url 'events:delete' event.pk %}" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <p class="mb-2"><strong>Type:</strong> {{ event.get_event_type_display }}</p>
+    <p class="mb-2"><strong>Ministry:</strong> {{ event.ministry|default:"N/A" }}</p>
+    <p class="mb-2"><strong>Start:</strong> {{ event.start_datetime|date:"M d, Y g:i A" }}</p>
+    <p class="mb-2"><strong>End:</strong> {{ event.end_datetime|date:"M d, Y g:i A" }}</p>
+    <p class="mb-2"><strong>Location:</strong> {{ event.location }}</p>
+    <p class="mb-2"><strong>Coordinator:</strong> {{ event.coordinator|default:"N/A" }}</p>
+    
+    <div class="mt-6">
+        <h3 class="font-bold text-gray-700 mb-2">Description</h3>
+        <p class="whitespace-pre-wrap">{{ event.description }}</p>
+    </div>
+    
+    <div class="mt-6">
+        <h3 class="font-bold text-gray-700 mb-2">Assigned Volunteers ({{ event.volunteer_count }}{% if event.max_volunteers %} / {{ event.max_volunteers }}{% endif %})</h3>
+        <ul class="list-disc list-inside">
+        {% for volunteer in event.assigned_volunteers.all %}
+            <li>{{ volunteer.user.get_full_name }}</li>
+        {% empty %}
+            <li>No volunteers assigned</li>
+        {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="mt-6">
+        <a href="{% url 'events:list' %}" class="text-blue-600 hover:underline">← Back to Events</a>
+    </div>
+</div>
+{% endblock %}

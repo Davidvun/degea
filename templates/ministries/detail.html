@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">{{ ministry.name }}</h2>
+        {% if user.can_manage_volunteers %}
+        <div class="space-x-2">
+            <a href="{% url 'ministries:edit' ministry.pk %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Edit</a>
+            <a href="{% url 'ministries:delete' ministry.pk %}" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <p class="mb-4"><strong>Leader:</strong> {{ ministry.leader|default:"No leader assigned" }}</p>
+    <p class="mb-4"><strong>Status:</strong> {% if ministry.is_active %}<span class="text-green-600">Active</span>{% else %}<span class="text-red-600">Inactive</span>{% endif %}</p>
+    <p class="mb-4"><strong>Created:</strong> {{ ministry.created_at|date:"M d, Y" }}</p>
+    
+    <div class="mt-6">
+        <h3 class="font-bold text-gray-700 mb-2">Description</h3>
+        <p class="whitespace-pre-wrap">{{ ministry.description }}</p>
+    </div>
+    
+    <div class="mt-6">
+        <h3 class="font-bold text-gray-700 mb-2">Volunteers ({{ ministry.volunteer_count }})</h3>
+        <ul class="list-disc list-inside">
+        {% for volunteer in ministry.volunteers.all %}
+            <li>{{ volunteer.user.get_full_name }}</li>
+        {% empty %}
+            <li>No volunteers assigned</li>
+        {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="mt-6">
+        <a href="{% url 'ministries:list' %}" class="text-blue-600 hover:underline">← Back to Ministries</a>
+    </div>
+</div>
+{% endblock %}

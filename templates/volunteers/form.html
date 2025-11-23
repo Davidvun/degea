@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold mb-6">{% if object %}Edit Volunteer{% else %}Add New Volunteer{% endif %}</h2>
+    
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <p class="font-bold">Please correct the errors below:</p>
+            {{ form.errors }}
+        </div>
+        {% endif %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Username</label>
+                {{ form.username }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Email</label>
+                {{ form.email }}
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">First Name</label>
+                {{ form.first_name }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Last Name</label>
+                {{ form.last_name }}
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Phone</label>
+                {{ form.phone }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Gender</label>
+                {{ form.gender }}
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Age</label>
+                {{ form.age }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Active Status</label>
+                {{ form.is_active }}
+            </div>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Address</label>
+            {{ form.address }}
+        </div>
+        
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Skills</label>
+            {{ form.skills }}
+        </div>
+        
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Interests</label>
+            {{ form.interests }}
+        </div>
+        
+        <div>
+            <label class="block text-gray-700 font-bold mb-2">Availability</label>
+            {{ form.availability }}
+        </div>
+        
+        <div class="flex space-x-4">
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+            <a href="{% url 'volunteers:list' %}" class="px-6 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

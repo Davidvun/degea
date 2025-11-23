@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Edit{% else %}Create{% endif %} Event Report - CCVMS{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-6">{% if object %}Edit{% else %}Create{% endif %} Event Report</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.title.label }}
+                    </label>
+                    {{ form.title }}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.summary.label }}
+                    </label>
+                    {{ form.summary }}
+                    <p class="text-xs text-gray-500 mt-1">{{ form.summary.help_text }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.attendance_count.label }}
+                    </label>
+                    {{ form.attendance_count }}
+                    <p class="text-xs text-gray-500 mt-1">{{ form.attendance_count.help_text }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.volunteer_performance.label }}
+                    </label>
+                    {{ form.volunteer_performance }}
+                    <p class="text-xs text-gray-500 mt-1">{{ form.volunteer_performance.help_text }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.challenges.label }}
+                    </label>
+                    {{ form.challenges }}
+                    <p class="text-xs text-gray-500 mt-1">{{ form.challenges.help_text }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.recommendations.label }}
+                    </label>
+                    {{ form.recommendations }}
+                    <p class="text-xs text-gray-500 mt-1">{{ form.recommendations.help_text }}</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.status.label }}
+                    </label>
+                    {{ form.status }}
+                    <p class="text-xs text-gray-500 mt-1">
+                        <strong>Draft:</strong> Save for later | 
+                        <strong>Submitted:</strong> Send to priest for review
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex space-x-3 mt-6">
+                <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700">
+                    {% if object %}Update{% else %}Create{% endif %} Report
+                </button>
+                <a href="{% if object %}{% url 'events:coordinator_detail' object.event.pk %}{% else %}{% url 'events:list' %}{% endif %}" 
+                   class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+}
+</style>
+{% endblock %}

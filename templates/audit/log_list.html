@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Audit Logs - CCVMS{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">System Audit Logs</h2>
+    
+    <div class="mb-4">
+        <form method="get" class="flex gap-2">
+            <select name="action" class="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">All Actions</option>
+                <option value="create" {% if request.GET.action == "create" %}selected{% endif %}>Create</option>
+                <option value="update" {% if request.GET.action == "update" %}selected{% endif %}>Update</option>
+                <option value="delete" {% if request.GET.action == "delete" %}selected{% endif %}>Delete</option>
+                <option value="login" {% if request.GET.action == "login" %}selected{% endif %}>Login</option>
+                <option value="logout" {% if request.GET.action == "logout" %}selected{% endif %}>Logout</option>
+            </select>
+            
+            <input type="date" name="date_from" value="{{ request.GET.date_from }}" placeholder="From Date"
+                   class="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            
+            <input type="date" name="date_to" value="{{ request.GET.date_to }}" placeholder="To Date"
+                   class="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            
+            <button type="submit" class="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700">
+                Filter
+            </button>
+            {% if request.GET.action or request.GET.date_from or request.GET.date_to %}
+            <a href="{% url 'audit:log_list' %}" class="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500">
+                Clear
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Timestamp</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">User</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Action</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Model</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Object ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Details</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for log in logs %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {{ log.timestamp|date:"M d, Y h:i A" }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">{{ log.user.get_full_name }}</div>
+                        <div class="text-sm text-gray-500">{{ log.user.username }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                     {% if log.action == 'create' %}bg-green-100 text-green-800
+                                     {% elif log.action == 'update' %}bg-blue-100 text-blue-800
+                                     {% elif log.action == 'delete' %}bg-red-100 text-red-800
+                                     {% else %}bg-gray-100 text-gray-800{% endif %}">
+                            {{ log.get_action_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {{ log.model_name|default:"—" }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {{ log.object_id|default:"—" }}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        {{ log.details|default:"—"|truncatewords:15 }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                        No audit logs found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <div class="mt-6 flex justify-center">
+        <nav class="inline-flex rounded-md shadow-sm">
+            {% if page_obj.has_previous %}
+            <a href="?page=1" class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+            {% endif %}
+            
+            <span class="px-3 py-2 border border-gray-300 bg-gray-100 text-sm font-medium text-gray-700">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">Last</a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

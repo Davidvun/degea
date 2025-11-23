@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Event Report - {{ report.title }} - CCVMS{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <h2 class="text-3xl font-bold">{{ report.title }}</h2>
+                <p class="text-gray-600 mt-1">
+                    Report for: <a href="{% url 'events:detail' report.event.pk %}" class="text-blue-600 hover:text-blue-800">
+                        {{ report.event.title }}
+                    </a>
+                </p>
+            </div>
+            <span class="px-4 py-2 rounded-lg font-semibold
+                {% if report.status == 'reviewed' %}bg-green-200 text-green-800
+                {% elif report.status == 'submitted' %}bg-blue-200 text-blue-800
+                {% else %}bg-gray-200 text-gray-800{% endif %}">
+                {{ report.get_status_display }}
+            </span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6 pb-6 border-b">
+            <div>
+                <p class="text-sm text-gray-600">Submitted By</p>
+                <p class="font-semibold">{{ report.submitted_by.get_full_name }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Submitted At</p>
+                <p class="font-semibold">
+                    {% if report.submitted_at %}
+                        {{ report.submitted_at|date:"M d, Y @ g:i A" }}
+                    {% else %}
+                        Not yet submitted
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Attendance Count</p>
+                <p class="font-semibold text-2xl text-blue-600">{{ report.attendance_count }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-600">Event Date</p>
+                <p class="font-semibold">{{ report.event.start_datetime|date:"M d, Y" }}</p>
+            </div>
+        </div>
+        
+        <div class="space-y-6">
+            <div>
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Summary</h3>
+                <p class="text-gray-800 whitespace-pre-line">{{ report.summary }}</p>
+            </div>
+            
+            <div>
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Volunteer Performance</h3>
+                <p class="text-gray-800 whitespace-pre-line">{{ report.volunteer_performance }}</p>
+            </div>
+            
+            {% if report.challenges %}
+            <div>
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Challenges Encountered</h3>
+                <p class="text-gray-800 whitespace-pre-line">{{ report.challenges }}</p>
+            </div>
+            {% endif %}
+            
+            {% if report.recommendations %}
+            <div>
+                <h3 class="text-lg font-bold text-gray-700 mb-2">Recommendations</h3>
+                <p class="text-gray-800 whitespace-pre-line">{{ report.recommendations }}</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        {% if report.status == 'reviewed' %}
+        <div class="mt-6 p-4 bg-green-50 border-l-4 border-green-500">
+            <p class="text-green-800">
+                <strong>Reviewed by:</strong> {{ report.reviewed_by.get_full_name }} 
+                on {{ report.reviewed_at|date:"M d, Y @ g:i A" }}
+            </p>
+        </div>
+        {% endif %}
+        
+        <div class="flex space-x-3 mt-6">
+            {% if user.is_coordinator and report.submitted_by == user and report.status != 'reviewed' %}
+            <a href="{% url 'events:report_edit' report.pk %}" 
+               class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                Edit Report
+            </a>
+            {% endif %}
+            
+            <a href="{% if user.is_coordinator %}{% url 'events:coordinator_detail' report.event.pk %}{% else %}{% url 'events:detail' report.event.pk %}{% endif %}" 
+               class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
+                Back to Event
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Events</h2>
+<div class="bg-white shadow rounded-lg p-6">
+    <ul class="mt-4">
+    {% for event in events %}
+        <li class="py-2 border-b">{{ event.title }} - {{ event.start_datetime|date:"M d, Y" }}</li>
+    {% empty %}
+        <li class="py-2">No events found.</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

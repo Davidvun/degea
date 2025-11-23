@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CCVMS - Catholic Church Volunteer Management System{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">CCVMS</h1>
+            {% if user.is_authenticated %}
+            <div class="space-x-4">
+                <a href="{% url 'dashboard' %}" class="hover:underline">Dashboard</a>
+                
+                {% if user.is_administrator or user.is_coordinator %}
+                <a href="{% url 'volunteers:list' %}" class="hover:underline">Volunteers</a>
+                {% endif %}
+                
+                {% if user.is_administrator or user.is_priest or user.is_coordinator %}
+                <a href="{% url 'ministries:list' %}" class="hover:underline">Ministries</a>
+                {% endif %}
+                
+                <a href="{% url 'events:list' %}" class="hover:underline">Events</a>
+                
+                {% if user.is_administrator or user.is_coordinator %}
+                <a href="{% url 'attendance:list' %}" class="hover:underline">Attendance</a>
+                <a href="{% url 'communications:list' %}" class="hover:underline">Communications</a>
+                {% endif %}
+                
+                {% if user.can_view_reports %}
+                <a href="{% url 'reports:dashboard' %}" class="hover:underline">Reports</a>
+                {% endif %}
+                
+                <a href="{% url 'feedback:list' %}" class="hover:underline">Feedback</a>
+                
+                {% if user.is_administrator %}
+                <a href="{% url 'accounts:user_list' %}" class="hover:underline">Users</a>
+                <a href="/admin/" class="hover:underline">Admin</a>
+                {% endif %}
+                
+                <form method="post" action="{% url 'accounts:logout' %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="hover:underline bg-transparent border-0 text-white cursor-pointer">Logout ({{ user.username }})</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+    
+    <div class="container mx-auto mt-8 px-4">
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-2">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

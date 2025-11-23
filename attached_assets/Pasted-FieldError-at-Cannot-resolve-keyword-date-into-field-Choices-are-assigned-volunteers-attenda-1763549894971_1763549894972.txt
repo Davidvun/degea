@@ -1,0 +1,222 @@
+FieldError at /
+Cannot resolve keyword 'date' into field. Choices are: assigned_volunteers, attendance_records, coordinator, coordinator_id, created_at, description, end_datetime, evaluations, event_type, feedback, id, is_active, location, max_volunteers, ministry, ministry_id, start_datetime, title, updated_at
+Request Method:	GET
+Request URL:	http://7817f170-a33a-46c1-a5cb-ecb2f144c6dc-00-2cy3g01d9tecr.riker.replit.dev/
+Django Version:	5.2.8
+Exception Type:	FieldError
+Exception Value:	
+Cannot resolve keyword 'date' into field. Choices are: assigned_volunteers, attendance_records, coordinator, coordinator_id, created_at, description, end_datetime, evaluations, event_type, feedback, id, is_active, location, max_volunteers, ministry, ministry_id, start_datetime, title, updated_at
+Exception Location:	/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/sql/query.py, line 1806, in names_to_path
+Raised during:	ccvms.views.DashboardView
+Python Executable:	/home/runner/workspace/.pythonlibs/bin/python
+Python Version:	3.11.13
+Python Path:	
+['/home/runner/workspace',
+ '/nix/store/zz7i75jb78idaz0rb1y1i4rzdyxq28vf-sitecustomize/lib/python/site-packages',
+ '/nix/store/yaps09f01jp3fd1405qlr0qz6haf6z03-python3.11-pip-25.0.1/lib/python3.11/site-packages',
+ '/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python311.zip',
+ '/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11',
+ '/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/lib-dynload',
+ '/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages',
+ '/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/site-packages',
+ '/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages',
+ '/nix/store/y0iwy8ma2m45pr23bw4r7lyz69v2b6wf-python3.11-setuptools-80.7.1/lib/python3.11/site-packages']
+Server time:	Wed, 19 Nov 2025 10:57:59 +0000
+Traceback Switch to copy-and-paste view
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/core/handlers/exception.py, line 55, in inner
+                response = get_response(request)
+                               ^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/core/handlers/base.py, line 197, in _get_response
+                response = wrapped_callback(request, *callback_args, **callback_kwargs)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/views/generic/base.py, line 105, in view
+            return self.dispatch(request, *args, **kwargs)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/contrib/auth/mixins.py, line 73, in dispatch
+        return super().dispatch(request, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/views/generic/base.py, line 144, in dispatch
+        return handler(request, *args, **kwargs)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/views/generic/base.py, line 228, in get
+        context = self.get_context_data(**kwargs)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/ccvms/views.py, line 45, in get_context_data
+        context['upcoming_events'] = Event.objects.filter(
+                                          …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/manager.py, line 87, in manager_method
+                return getattr(self.get_queryset(), name)(*args, **kwargs)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/query.py, line 1495, in filter
+        return self._filter_or_exclude(False, args, kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/query.py, line 1513, in _filter_or_exclude
+            clone._filter_or_exclude_inplace(negate, args, kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/query.py, line 1523, in _filter_or_exclude_inplace
+            self._query.add_q(Q(*args, **kwargs))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/sql/query.py, line 1646, in add_q
+        clause, _ = self._add_q(q_object, can_reuse)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/sql/query.py, line 1678, in _add_q
+            child_clause, needed_inner = self.build_filter(
+                                                …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/sql/query.py, line 1526, in build_filter
+        lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/sql/query.py, line 1333, in solve_lookup_type
+        _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ …
+Local vars
+/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/django/db/models/sql/query.py, line 1806, in names_to_path
+                    raise FieldError(
+                          ^ …
+Local vars
+Request information
+USER
+Admin User (Administrator)
+
+GET
+No GET data
+
+POST
+No POST data
+
+FILES
+No FILES data
+
+COOKIES
+Variable	Value
+csrftoken	
+'********************'
+sessionid	
+'********************'
+META
+Variable	Value
+COLORTERM	
+'truecolor'
+CONNECTORS_HOSTNAME	
+'connectors.replit.com'
+CONTENT_LENGTH	
+''
+CONTENT_TYPE	
+'text/plain'
+CSRF_COOKIE	
+'sTTJmLg2WkUfDyz5IAEK5Fgc0uduum40'
+DATABASE_URL	
+'postgresql://postgres:password@helium/heliumdb?sslmode=disable'
+DISPLAY	
+':0'
+DJANGO_SETTINGS_MODULE	
+'ccvms.settings'
+DOCKER_CONFIG	
+'/home/runner/workspace/.config/docker'
+GATEWAY_INTERFACE	
+'CGI/1.1'
+GIT_ASKPASS	
+'********************'
+GIT_EDITOR	
+'replit-git-editor'
+GLIBC_TUNABLES	
+'glibc.rtld.optional_static_tls=10000'
+HOME	
+'/home/runner'
+HOSTNAME	
+'59495872e79d'
+HTTP_ACCEPT	
+'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
+HTTP_ACCEPT_ENCODING	
+'identity, gzip, deflate, br, zstd'
+HTTP_ACCEPT_LANGUAGE	
+'en-US,en;q=0.9'
+HTTP_CACHE_CONTROL	
+'max-age=0'
+HTTP_COOKIE	
+'********************'
+HTTP_HOST	
+'7817f170-a33a-46c1-a5cb-ecb2f144c6dc-00-2cy3g01d9tecr.riker.replit.dev'
+HTTP_REFERER	
+'https://7817f170-a33a-46c1-a5cb-ecb2f144c6dc-00-2cy3g01d9tecr.riker.replit.dev/accounts/login/?next=/'
+HTTP_SEC_CH_UA	
+'"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"'
+HTTP_SEC_CH_UA_MOBILE	
+'?0'
+HTTP_SEC_CH_UA_PLATFORM	
+'"Windows"'
+HTTP_SEC_FETCH_DEST	
+'iframe'
+HTTP_SEC_FETCH_MODE	
+'navigate'
+HTTP_SEC_FETCH_SITE	
+'same-origin'
+HTTP_SEC_FETCH_STORAGE_ACCESS	
+'active'
+HTTP_SEC_FETCH_USER	
+'?1'
+HTTP_UPGRADE_INSECURE_REQUESTS	
+'1'
+HTTP_USER_AGENT	
+('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like '
+ 'Gecko) Chrome/142.0.0.0 Safari/537.36')
+HTTP_X_FORWARDED_FOR	
+'102.22.163.188, 10.81.5.148'
+HTTP_X_FORWARDED_PROTO	
+'https'
+HTTP_X_REPLIT_USER_BIO	
+''
+HTTP_X_REPLIT_USER_ID	
+''
+HTTP_X_REPLIT_USER_NAME	
+''
+HTTP_X_REPLIT_USER_PROFILE_IMAGE	
+''
+HTTP_X_REPLIT_USER_ROLES	
+''
+HTTP_X_REPLIT_USER_TEAMS	
+''
+HTTP_X_REPLIT_USER_URL	
+''
+LANG	
+'en_US.UTF-8'
+LD_AUDIT	
+'/nix/store/6y0zqxaf220r36b74hwsq9m2b2av3lw7-replit_rtld_loader-1/rtld_loader.so'
+LIBGL_DRIVERS_PATH	
+'/nix/store/l4myp7qn0q9bqgmkqq4vnnii22ql1r68-mesa-25.0.7/lib/dri'
+LOCALE_ARCHIVE	
+'/usr/lib/locale/locale-archive'
+LS_COLORS	
+'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.7z=01;31:*.ace=01;31:*.alz=01;31:*.apk=01;31:*.arc=01;31:*.arj=01;31:*.bz=01;31:*.bz2=01;31:*.cab=01;31:*.cpio=01;31:*.crate=01;31:*.deb=01;31:*.drpm=01;31:*.dwm=01;31:*.dz=01;31:*.ear=01;31:*.egg=01;31:*.esd=01;31:*.gz=01;31:*.jar=01;31:*.lha=01;31:*.lrz=01;31:*.lz=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.lzo=01;31:*.pyz=01;31:*.rar=01;31:*.rpm=01;31:*.rz=01;31:*.sar=01;31:*.swm=01;31:*.t7z=01;31:*.tar=01;31:*.taz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tgz=01;31:*.tlz=01;31:*.txz=01;31:*.tz=01;31:*.tzo=01;31:*.tzst=01;31:*.udeb=01;31:*.war=01;31:*.whl=01;31:*.wim=01;31:*.xz=01;31:*.z=01;31:*.zip=01;31:*.zoo=01;31:*.zst=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.jxl=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:'
+NIXPKGS_ALLOW_UNFREE	
+'1'
+NIX_PATH	
+'nixpkgs=/home/runner/.nix-defexpr/channels/nixpkgs-stable-25_05:/home/runner/.nix-defexpr/channels'
+NIX_PROFILES	
+'/nix/var/nix/profiles/default /home/runner/.nix-profile'
+PATH	
+'/home/runner/workspace/.pythonlibs/bin:/nix/store/2lcqw1d28vklbk8ikiwad28iq2smwndv-python-wrapped-0.1.0/bin:/nix/store/2qx6jrl9h5hwpsry3ilbiihgmrnrvp50-pip-wrapper/bin:/nix/store/mx06wb8qp5z14na666bwnm1f2mxxwzj0-poetry-wrapper/bin:/nix/store/dskqlwh65dy4p9as5b2ahkx5d9cyp76z-uv-0.9.5/bin:/nix/store/qnrg3pxqfvqgvwqxrzg7lm5a8nchvhnk-pid1/bin:/nix/store/ysn51zb0vsnpsidlckrim5wvibqs1bhj-replit-runtime-path/bin:/home/runner/.nix-profile/bin:/home/runner/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+PATH_INFO	
+'/'
+PGDATABASE	
+'heliumdb'
+PGHOST	
+'helium'
+PGPASSWORD	
+'********************'
+PGPORT	
+'5432'
+PGUSER

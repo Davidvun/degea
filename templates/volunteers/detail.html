@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-white shadow-md rounded-lg p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold">Volunteer Details</h2>
+        {% if user.can_manage_volunteers %}
+        <div class="space-x-2">
+            <a href="{% url 'volunteers:edit' volunteer.pk %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Edit</a>
+            <a href="{% url 'volunteers:delete' volunteer.pk %}" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Delete</a>
+        </div>
+        {% endif %}
+    </div>
+    
+    {% if user.can_manage_volunteers and volunteer.user.is_pending_approval %}
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-yellow-800 mb-2">Pending Approval</h3>
+                <p class="text-yellow-700">This volunteer account is waiting for admin approval.</p>
+            </div>
+            <div class="flex gap-2">
+                <form method="post" action="{% url 'volunteers:approve' volunteer.pk %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        Approve
+                    </button>
+                </form>
+                <form method="post" action="{% url 'volunteers:reject' volunteer.pk %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                        Reject
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <h3 class="font-bold text-gray-700 mb-2">Personal Information</h3>
+            <p><strong>Name:</strong> {{ volunteer.user.get_full_name }}</p>
+            <p><strong>Email:</strong> {{ volunteer.user.email }}</p>
+            <p><strong>Phone:</strong> {{ volunteer.user.phone|default:"N/A" }}</p>
+            <p><strong>Gender:</strong> {{ volunteer.get_gender_display }}</p>
+            <p><strong>Age:</strong> {{ volunteer.age }}</p>
+            <p><strong>Account Status:</strong> 
+                {% if volunteer.user.approval_status == 'pending' %}
+                <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Pending Approval</span>
+                {% elif volunteer.user.approval_status == 'approved' %}
+                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Approved</span>
+                {% elif volunteer.user.approval_status == 'rejected' %}
+                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Rejected</span>
+                {% endif %}
+            </p>
+            <p><strong>Status:</strong> {% if volunteer.is_active %}<span class="text-green-600">Active</span>{% else %}<span class="text-red-600">Inactive</span>{% endif %}</p>
+        </div>
+        
+        <div>
+            <h3 class="font-bold text-gray-700 mb-2">Additional Information</h3>
+            <p><strong>Date Joined:</strong> {{ volunteer.date_joined|date:"M d, Y" }}</p>
+            <p><strong>Address:</strong> {{ volunteer.address|default:"N/A" }}</p>
+            {% if volunteer.supporting_document %}
+            <p class="mt-4"><strong>Supporting Document:</strong> 
+                <a href="{{ volunteer.supporting_document.url }}" target="_blank" class="text-blue-600 hover:underline">
+                    Download Document
+                </a>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="mt-6">
+        <h3 class="font-bold text-gray-700 mb-2">Skills</h3>
+        <p class="whitespace-pre-wrap">{{ volunteer.skills }}</p>
+    </div>
+    
+    <div class="mt-6">
+        <h3 class="font-bold text-gray-700 mb-2">Interests</h3>
+        <p class="whitespace-pre-wrap">{{ volunteer.interests }}</p>
+    </div>
+    
+    <div class="mt-6">
+        <h3 class="font-bold text-gray-700 mb-2">Availability</h3>
+        <p class="whitespace-pre-wrap">{{ volunteer.availability }}</p>
+    </div>
+    
+    <div class="mt-6">
+        <a href="{% url 'volunteers:list' %}" class="text-blue-600 hover:underline">← Back to Volunteers</a>
+    </div>
+</div>
+{% endblock %}

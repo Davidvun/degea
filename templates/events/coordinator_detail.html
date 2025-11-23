@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Event - {{ event.title }} - CCVMS{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-3xl font-bold">Manage Event: {{ event.title }}</h2>
+        <a href="{% url 'events:list' %}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Back to Events
+        </a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2">
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h3 class="text-2xl font-bold mb-4">Event Details</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-sm text-gray-600">Event Type</p>
+                    <p class="font-semibold">{{ event.get_event_type_display }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Ministry</p>
+                    <p class="font-semibold">{{ event.ministry.name|default:"Not assigned" }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Start Date & Time</p>
+                    <p class="font-semibold">{{ event.start_datetime|date:"M d, Y @ g:i A" }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">End Date & Time</p>
+                    <p class="font-semibold">{{ event.end_datetime|date:"M d, Y @ g:i A" }}</p>
+                </div>
+                <div class="col-span-2">
+                    <p class="text-sm text-gray-600">Location</p>
+                    <p class="font-semibold">{{ event.location }}</p>
+                </div>
+                <div class="col-span-2">
+                    <p class="text-sm text-gray-600">Description</p>
+                    <p class="text-gray-800">{{ event.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Assigned Volunteers ({{ event.assigned_volunteers.count }})</h3>
+            </div>
+            
+            {% if event.assigned_volunteers.all %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for volunteer in event.assigned_volunteers.all %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="{% url 'volunteers:detail' volunteer.pk %}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                    {{ volunteer.user.get_full_name }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ volunteer.user.email }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ volunteer.phone_number|default:"N/A" }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <form method="post" action="{% url 'events:remove_volunteer' event.pk volunteer.pk %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" onclick="return confirm('Remove this volunteer from event?')" 
+                                            class="text-red-600 hover:text-red-800 text-sm">
+                                        Remove
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-gray-500">No volunteers assigned yet.</p>
+            {% endif %}
+
+            <div class="mt-6 p-4 bg-gray-50 rounded">
+                <h4 class="font-semibold mb-3">Add Volunteers from Your Ministry</h4>
+                <form method="post" action="{% url 'events:add_volunteers' event.pk %}">
+                    {% csrf_token %}
+                    {{ add_volunteer_form.as_p }}
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-2">
+                        Add Selected Volunteers
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Tasks ({{ tasks.count }})</h3>
+                <a href="{% url 'events:task_create' event.pk %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Create Task
+                </a>
+            </div>
+            
+            {% if tasks %}
+            <div class="space-y-3">
+                {% for task in tasks %}
+                <div class="border rounded-lg p-4 {% if task.status == 'completed' %}bg-green-50{% elif task.status == 'in_progress' %}bg-blue-50{% endif %}">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-lg">{{ task.title }}</h4>
+                            <p class="text-gray-600 text-sm mt-1">{{ task.description }}</p>
+                            <div class="mt-2 text-sm">
+                                <span class="inline-block bg-gray-200 px-2 py-1 rounded mr-2">
+                                    <strong>Assigned to:</strong> {{ task.assigned_to.user.get_full_name }}
+                                </span>
+                                <span class="inline-block px-2 py-1 rounded
+                                    {% if task.status == 'completed' %}bg-green-200 text-green-800
+                                    {% elif task.status == 'in_progress' %}bg-blue-200 text-blue-800
+                                    {% elif task.status == 'cancelled' %}bg-red-200 text-red-800
+                                    {% else %}bg-yellow-200 text-yellow-800{% endif %}">
+                                    {{ task.get_status_display }}
+                                </span>
+                                {% if task.due_date %}
+                                <span class="inline-block bg-gray-200 px-2 py-1 rounded ml-2">
+                                    <strong>Due:</strong> {{ task.due_date|date:"M d, Y" }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="ml-4 flex space-x-2">
+                            <a href="{% url 'events:task_edit' task.pk %}" class="text-blue-600 hover:text-blue-800">
+                                Edit
+                            </a>
+                            <a href="{% url 'events:task_delete' task.pk %}" class="text-red-600 hover:text-red-800">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-500">No tasks created yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="lg:col-span-1">
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h3 class="text-xl font-bold mb-4">Event Reports</h3>
+            
+            {% if reports %}
+            <div class="space-y-3">
+                {% for report in reports %}
+                <div class="border rounded-lg p-3">
+                    <a href="{% url 'events:report_detail' report.pk %}" class="font-semibold text-blue-600 hover:text-blue-800">
+                        {{ report.title }}
+                    </a>
+                    <div class="text-sm text-gray-600 mt-1">
+                        <span class="inline-block px-2 py-1 rounded
+                            {% if report.status == 'reviewed' %}bg-green-200 text-green-800
+                            {% elif report.status == 'submitted' %}bg-blue-200 text-blue-800
+                            {% else %}bg-gray-200 text-gray-800{% endif %}">
+                            {{ report.get_status_display }}
+                        </span>
+                    </div>
+                    {% if report.status != 'reviewed' %}
+                    <a href="{% url 'events:report_edit' report.pk %}" class="text-sm text-blue-600 hover:text-blue-800 mt-2 inline-block">
+                        Edit Report
+                    </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-500 text-sm mb-4">No reports submitted yet.</p>
+            {% endif %}
+            
+            <a href="{% url 'events:report_create' event.pk %}" class="block w-full text-center bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mt-4">
+                Create New Report
+            </a>
+        </div>
+
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+            <h4 class="font-bold text-blue-800 mb-2">Coordinator Guide</h4>
+            <ul class="text-sm text-blue-700 space-y-1">
+                <li>• Add volunteers from your ministry</li>
+                <li>• Create and assign tasks</li>
+                <li>• Track task progress</li>
+                <li>• Submit reports to your priest</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

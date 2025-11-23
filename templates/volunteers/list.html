@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-3xl font-bold text-gray-800">Volunteers</h2>
+    {% if user.can_manage_volunteers %}
+    <a href="{% url 'volunteers:create' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        Add Volunteer
+    </a>
+    {% endif %}
+</div>
+
+<div class="bg-white shadow rounded-lg p-6">
+    <div class="mb-4 flex justify-between items-center">
+        <p class="text-gray-600">Total volunteers: {{ volunteers|length }}</p>
+        <form method="get" class="flex gap-2">
+            <input type="text" name="search" placeholder="Search volunteers..." value="{{ request.GET.search }}" class="border border-gray-300 rounded px-3 py-2">
+            <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Search</button>
+        </form>
+    </div>
+    
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for volunteer in volunteers %}
+                <tr class="{% if volunteer.user.is_pending_approval %}bg-yellow-50{% endif %}">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div>
+                                <div class="text-sm font-medium text-gray-900">{{ volunteer.user.get_full_name }}</div>
+                                <div class="text-sm text-gray-500">Joined: {{ volunteer.date_joined }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ volunteer.user.email }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">{{ volunteer.user.phone|default:"N/A" }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% if volunteer.user.approval_status == 'pending' %}
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Pending Approval
+                        </span>
+                        {% elif volunteer.user.approval_status == 'approved' %}
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            Approved
+                        </span>
+                        {% elif volunteer.user.approval_status == 'rejected' %}
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Rejected
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-900">{{ volunteer.skills|truncatewords:10 }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex gap-2">
+                            <a href="{% url 'volunteers:detail' volunteer.pk %}" class="text-blue-600 hover:text-blue-900">View</a>
+                            
+                            {% if user.can_manage_volunteers %}
+                                {% if volunteer.user.is_pending_approval %}
+                                <form method="post" action="{% url 'volunteers:approve' volunteer.pk %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-green-600 hover:text-green-900">Approve</button>
+                                </form>
+                                <form method="post" action="{% url 'volunteers:reject' volunteer.pk %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-red-600 hover:text-red-900">Reject</button>
+                                </form>
+                                {% else %}
+                                <a href="{% url 'volunteers:edit' volunteer.pk %}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                <a href="{% url 'volunteers:delete' volunteer.pk %}" class="text-red-600 hover:text-red-900">Delete</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">No volunteers found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
